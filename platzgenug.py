@@ -63,7 +63,7 @@ if False:
 
 ## convert to message
 
-import code;code.interact(local=locals())
+#import code;code.interact(local=locals())
 
 vergleichsName = choice(list(vergleichsFlaechen.keys()))
 vergleichsFlaeche = vergleichsFlaechen[vergleichsName]
@@ -72,7 +72,7 @@ parkingFreeTotal = nansum(parkingFree)
 parkingCapacityTotal = nansum(parkingCapacity)
 parkingFreeFraction = parkingFreeTotal / parkingCapacityTotal
 parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
-theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfuegbaren Parkhausplaetzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Parken noch Autos am Straßenrand?"
+theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Parken noch Autos am Straßenrand?"
 print(theMessage)
 
 #import code;code.interact(local=locals())
@@ -90,4 +90,4 @@ twitter = Twython(
     access_token_secret
 )
 twitter.update_status(status=theMessage)
-print("Tweeted: %s" % message)
+print("Tweeted: %s" % theMessage)
