@@ -73,7 +73,7 @@ parkingFreeTotal = nansum(parkingFree)
 parkingCapacityTotal = nansum(parkingCapacity)
 parkingFreeFraction = parkingFreeTotal / parkingCapacityTotal
 parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
-theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Parken noch Autos am Straßenrand?"
+theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Stehen trotzdem noch Autos am Straßenrand?"
 #print(theMessage)
 
 #import code;code.interact(local=locals())
