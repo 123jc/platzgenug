@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ## settings
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
@@ -45,7 +46,7 @@ for i in list(range(len(parking_containers))):
         temp = parking_containers[i].text
         thisParkingCapacity = int(temp[temp.find('gesamt')+7:temp.find('Parkpl')-1])
 
-    print(thisParkingName,thisParkingOpen,thisParkingFree,thisParkingCapacity)
+    #print(thisParkingName,thisParkingOpen,thisParkingFree,thisParkingCapacity)
     # append to lists
     parkingName.append(thisParkingName)
     parkingCapacity.append(thisParkingCapacity)
@@ -73,7 +74,7 @@ parkingCapacityTotal = nansum(parkingCapacity)
 parkingFreeFraction = parkingFreeTotal / parkingCapacityTotal
 parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
 theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Parken noch Autos am Straßenrand?"
-print(theMessage)
+#print(theMessage)
 
 #import code;code.interact(local=locals())
 
@@ -90,4 +91,4 @@ twitter = Twython(
     access_token_secret
 )
 twitter.update_status(status=theMessage)
-print("Tweeted: %s" % theMessage)
+#print("Tweeted: %s" % theMessage)
