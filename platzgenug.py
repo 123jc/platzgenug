@@ -3,12 +3,13 @@
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300} # in Google Earth gemessen
-
+statements = ["Wo sind die überdachten Fahrradbügel?","Stehen trotzdem noch Autos am Straßenrand?","Karlsruhe: Roter Teppich für Autos.", "Jetzt Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/"]
+hashtags = ["#mehrplatzfuersrad","#verkehrswendejetzt","#verkehrswende","#autostadt"]
 
 ## imports
 from twitterCred import *   # twitterCred.py resides in the code dir, provides consumer_key, consumer_secret, access_token, access_token_secret
 from bs4 import BeautifulSoup
-import pandas as pd
+#import pandas as pd
 from random import choice
 from numpy import nan,nansum
 from requests import get
@@ -69,11 +70,14 @@ if False:
 vergleichsName = choice(list(vergleichsFlaechen.keys()))
 vergleichsFlaeche = vergleichsFlaechen[vergleichsName]
 
+statement = choice(statements)
+hashtag = choice(hashtags)
+
 parkingFreeTotal = nansum(parkingFree)
 parkingCapacityTotal = nansum(parkingCapacity)
 parkingFreeFraction = parkingFreeTotal / parkingCapacityTotal
 parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
-theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". Stehen trotzdem noch Autos am Straßenrand? #nennmichnichtfahrradstadt"
+theMessage = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1))+"x"+vergleichsName+". " + statement + " " + hashtag
 #print(theMessage)
 
 #import code;code.interact(local=locals())
