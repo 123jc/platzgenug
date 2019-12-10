@@ -4,7 +4,7 @@ parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300} # in Google Earth gemessen
 statements = ["Wo sind die überdachten Fahrradbügel?","Stehen trotzdem noch Autos am Straßenrand?","Karlsruhe: Roter Teppich für Autos.", "Jetzt Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/"]
-hashtags = ["#mehrplatzfuersrad","#verkehrswendejetzt","#verkehrswende","#autostadt"]
+hashtags = ["#MehrPlatzfürsRad","#VerkehrswendeJetzt","#verkehrswende","#autostadt","nennmichnichtfahrradstadt"]
 
 ## imports
 from twitterCred import *   # twitterCred.py resides in the code dir, provides consumer_key, consumer_secret, access_token, access_token_secret
