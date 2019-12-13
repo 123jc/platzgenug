@@ -3,7 +3,7 @@
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300} # in Google Earth gemessen
-statements = ["Wo sind die überdachten Fahrradbügel?","Stehen trotzdem noch Autos am Straßenrand?","Karlsruhe: Roter Teppich für Autos.", "Jetzt Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/"]
+statements = ["Wo sind die überdachten Fahrradbügel?","Stehen trotzdem noch Autos am Straßenrand?","Karlsruhe: Roter Teppich für Autos.", "Jetzt das städtische Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/","Sind trotzdem noch Radwege zugeparkt?","Sind dennoch weiter Autos im Halteverbot abgestellt?","Fahren dennoch weiter Autos auf der Suche nach kostenlosen Parkplätzen durch die Stadt?"]
 hashtags = ["#MehrPlatzfürsRad","#VerkehrswendeJetzt","#verkehrswende","#autostadt","#nennmichnichtfahrradstadt"]
 
 ## imports
