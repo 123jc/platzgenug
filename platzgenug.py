@@ -5,9 +5,9 @@ postHourMax = 21  # no more posting if hour greater
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 familyAppArea = 110 # m2
-dataFile = './data.csv'
+dataFileBase = 'data.csv'
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300,'Schlossgartenspielplatz':5100} # in Google Earth gemessen
-alternativeUseAreas = {'große Straßenbäume': parkplatzFlaeche/1., 'Cafétische':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/1. ,'Ruhebänke': parkplatzFlaeche/1.5, 'Tischtennisplatten':parkplatzFlaeche/1.,'Fahrradbügelstellplätze':parkplatzFlaeche/8.}  # aus Parking Day-Fotos geschaetzt
+alternativeUseAreas = {'Bäume': parkplatzFlaeche/1., 'Cafétische':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/1. ,'Ruhebänke': parkplatzFlaeche/1.5, 'Fahrradbügelstellplätze':parkplatzFlaeche/8.}  # aus Parking Day-Fotos geschaetzt
 statements = ["Wo sind die überdachten Fahrradbügel?",
               "Stehen trotzdem noch Autos am Straßenrand?",
               "Karlsruhe: Roter Teppich für Autos.",
@@ -26,14 +26,17 @@ from numpy import nan,nansum
 from requests import get
 from twython import Twython # twitter access
 from datetime import datetime
+from os import getcwd
 
-    
 ## initialize variables
 theTime = []
 parkingName = []
 parkingCapacity = []
 parkingOpen = []
 parkingFree = []
+dataDir = getcwd()
+dataFile = dataDir + '/' + dataFileBase
+
 
 ## what time is it?
 now = datetime.now()
@@ -124,10 +127,9 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     # make messages (choose one)
     option = choice([1,2,3])
 
-
     ## fraction, comparison to popular space
     if option == 1:
-        messageBody = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" verfügbaren Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1)).replace('.',',')+" mal "+vergleichsName+"."
+        messageBody = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1)).replace('.',',')+" mal "+vergleichsName+"."
         statement = choice(statements)
         hashtag = choice(hashtags)
 
@@ -145,7 +147,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
                 alternativeUseString += ', '
             i +=1
         
-        messageBody = "Im Herzen von #Karlsruhe sind gerade "+str(int(parkingFreeTotal))+" Auto-Parkhausplätze ungenutzt. Wenn entsprechend viele Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 öffentlicher Raum wieder frei. Darauf hätten z.B. " + alternativeUseString + " Platz."
+        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+" Auto-Parkhausplätze ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 öffentlicher Raum frei, z.B. für " + alternativeUseString + "."
         statement = choice(['',''])
         hashtag = choice(['#StaedteFuerMenschen','#Verkehrswende','#Autostadt'])
 
@@ -158,7 +160,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     
     ## total area, comparison to appartments
     elif option == 3:
-        messageBody = "In #Karlsruhe locken gerade insgesamt "+str(int(parkingCapacityTotal))+" Auto-Parkhausplätze den KFZ-Verkehr mitten ins Herz der Stadt. Das entspricht einer Fläche von " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2. Daraus könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je 110m2 machen."
+        messageBody = "In #Karlsruhe locken jetzt "+str(int(parkingCapacityTotal))+" Parkhausplätze Autos ins Herz der Stadt, gesamt: " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2. Daraus könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je 110m2 machen."
         statement = choice(['Prioritäten setzen!'])
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
     
@@ -181,7 +183,8 @@ if thisHour >= postHourMin:
         # "x von y (z%) von Gesamtkapazitaet frei"
         # "x von y (z%) von aktueller Kapazitaet frei"
         # max letzte 24 h, min, mean
-        
+
+
         ## post to twitter
         twitter = Twython(
             consumer_key,
