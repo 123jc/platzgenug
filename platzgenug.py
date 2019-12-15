@@ -9,7 +9,6 @@ dataFileBase = 'data.csv'
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300,'Schlossgartenspielplatz':5100} # in Google Earth gemessen
 alternativeUseAreas = {'Bäume': parkplatzFlaeche/1., 'Cafétische':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/1. ,'Ruhebänke': parkplatzFlaeche/1.5, 'Fahrradbügelstellplätze':parkplatzFlaeche/8.}  # aus Parking Day-Fotos geschaetzt
 statements = ["Wo sind die überdachten Fahrradbügel?",
-              "Stehen trotzdem noch Autos am Straßenrand?",
               "Karlsruhe: Roter Teppich für Autos.",
               "Jetzt das städtische Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/",
               "Sind trotzdem noch Radwege zugeparkt?",
