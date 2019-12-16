@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 ## settings
+doSaveData = True
+doTweet = True
 postHourMin = 9 # no posting if hour smaller
 postHourMax = 21  # no more posting if hour greater
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
@@ -95,9 +97,10 @@ if False:
   
     df.to_csv('my_csv.csv', mode='a', header=False)
 
-myCsvRow = current_time + "," + str(parkingFreeTotal) + "," + str(parkingCapacityTotal) + '\n'
-with open(dataFile,'a') as fd:
-    fd.write(myCsvRow)
+if doSaveData:
+    myCsvRow = current_time + "," + str(parkingFreeTotal) + "," + str(parkingCapacityTotal) + '\n'
+    with open(dataFile,'a') as fd:
+        fd.write(myCsvRow)
     
 
 
@@ -146,7 +149,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
                 alternativeUseString += ', '
             i +=1
         
-        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+ " von "+ str(int(parkingCapacityTotal)) +" Auto-Parkhausplätzen ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 öffentlicher Raum frei, z.B. für " + alternativeUseString + "."
+        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+ " von "+ str(int(parkingCapacityTotal)) +" Parkhausplätzen ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 frei, z.B. für " + alternativeUseString + "."
         statement = choice(['',''])
         hashtag = choice(['#StaedteFuerMenschen','#Verkehrswende','#Autostadt'])
 
@@ -185,13 +188,15 @@ if thisHour >= postHourMin:
 
 
         ## post to twitter
-        twitter = Twython(
-            consumer_key,
-            consumer_secret,
-            access_token,
-            access_token_secret
-        )
-        twitter.update_status(status=theMessage)
-        #print("Tweeted: %s" % theMessage)
-
+        if doTweet:
+            twitter = Twython(
+                consumer_key,
+                consumer_secret,
+                access_token,
+                access_token_secret
+            )
+            twitter.update_status(status=theMessage)
+            #print("Tweeted: %s" % theMessage)
+        else:
+            print(theMessage,len(theMessage))
 
