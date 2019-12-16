@@ -7,7 +7,7 @@ parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 familyAppArea = 110 # m2
 dataFileBase = 'data.csv'
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300,'Schlossgartenspielplatz':5100} # in Google Earth gemessen
-alternativeUseAreas = {'Bäume': parkplatzFlaeche/1., 'Cafétische':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/1. ,'Ruhebänke': parkplatzFlaeche/1.5, 'Fahrradbügelstellplätze':parkplatzFlaeche/8.}  # aus Parking Day-Fotos geschaetzt
+alternativeUseAreas = {'Bäume': parkplatzFlaeche/1.1, 'Cafétische oder Ruhebänke':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/.9 ,'Fahrradbügelstellplätze':parkplatzFlaeche/9.}  # aus Parking Day-Fotos geschaetzt
 statements = ["Wo sind die überdachten Fahrradbügel?",
               "Karlsruhe: Roter Teppich für Autos.",
               "Jetzt das städtische Klimaschutzkonzept kommentieren: https://beteiligung.karlsruhe.de/content/bbv/details/90/",
@@ -146,7 +146,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
                 alternativeUseString += ', '
             i +=1
         
-        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+" Auto-Parkhausplätze ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 öffentlicher Raum frei, z.B. für " + alternativeUseString + "."
+        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+ " von "+ str(int(parkingCapacityTotal)) +" Auto-Parkhausplätzen ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 öffentlicher Raum frei, z.B. für " + alternativeUseString + "."
         statement = choice(['',''])
         hashtag = choice(['#StaedteFuerMenschen','#Verkehrswende','#Autostadt'])
 
