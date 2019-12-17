@@ -112,11 +112,14 @@ if doSaveData:
 def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option):
     # imports
     from random import choice
-
+    from datetime import datetime
+    
     # computations
     parkingFreeFraction = parkingFreeTotal / parkingCapacityTotal
     parkingFreeArea = parkingFreeTotal*parkplatzFlaeche
-
+    now = datetime.now()
+    thisTime = now.strftime("%H:%M")
+    
     # select area to compare to (should be smaller than free parking space)
     vergleichsFlaeche = 10000000
     iterMax = 20
@@ -168,8 +171,8 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     
     ## total area, comparison to appartments
     elif option == 3:
-        messageBody = "In #Karlsruhe locken jetzt "+str(int(parkingCapacityTotal))+" Parkhausplätze Autos ins Herz der Stadt, gesamt: " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2. Daraus könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je 110m2 machen."
-        statement = choice(['Prioritäten...'])
+        messageBody = "In #Karlsruhe locken um "+thisTime+ " Uhr " + str(int(parkingCapacityTotal))+" Parkhausplätze Autos ins Herz der Stadt. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
+        statement = choice(['Prioritäten...',''])
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
     
     # assemble
