@@ -6,6 +6,7 @@ postHourMin = 9 # no posting if hour smaller
 postHourMax = 21  # no more posting if hour greater
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
+minParkingReportFractionForValid = 0.5  # minimum fraction of parking garages with valid reports needed
 familyAppArea = 110 # m2
 dataFileBase = 'data.csv'
 vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Garten':18200,'Ludwigsplatz':1200,'Gutenbergplatz':5300,'Schlossgartenspielplatz':5100} # in Google Earth gemessen
@@ -23,7 +24,7 @@ from twitterCred import *   # twitterCred.py resides in the code dir, provides c
 from bs4 import BeautifulSoup
 import pandas as pd
 from random import choice
-from numpy import nan,nansum
+from numpy import nan,nansum,where,isnan
 from requests import get
 from twython import Twython # twitter access
 from datetime import datetime
@@ -47,7 +48,7 @@ thisHour = int(now.strftime("%H"))
 ## get info from web page
 response = get(parkingURL)
 content = response.text
-soup = BeautifulSoup(content)
+soup = BeautifulSoup(content,'lxml')
 
 parking_containers = soup.find_all('div', class_ = 'parkhaus')
 
@@ -77,9 +78,13 @@ for i in list(range(len(parking_containers))):
     
 
 # compute total sums and fraction
-parkingFreeTotal = nansum(parkingFree)
 parkingCapacityTotal = nansum(parkingCapacity)
-
+if (nansum(where(isnan(parkingFree),0,1))/float(len(parkingFree))) >= minParkingReportFractionForValid:
+    parkingFreeTotal = nansum(parkingFree)
+    option = -1  # choose message at random
+else:
+    parkingFreeTotal = nan
+    option = 3  # print message 3
 
 ## write to data file
 if False:
@@ -104,7 +109,7 @@ if doSaveData:
     
 
 
-def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags):
+def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option):
     # imports
     from random import choice
 
@@ -127,8 +132,9 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
         
     # make messages (choose one)
-    option = choice([1,2,3])
-
+    if option < 0:
+        option = choice([1,2,3])
+    
     ## fraction, comparison to popular space
     if option == 1:
         messageBody = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1)).replace('.',',')+" mal "+vergleichsName+"."
@@ -177,7 +183,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
 ## convert to message and post
 if thisHour >= postHourMin:
     if thisHour <= postHourMax:
-        theMessage = assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags)
+        theMessage = assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option)
         
 #        import code;code.interact(local=locals())
 
