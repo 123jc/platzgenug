@@ -171,7 +171,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     
     ## total area, comparison to appartments
     elif option == 3:
-        messageBody = "In #Karlsruhe locken um "+thisTime+ " Uhr " + str(int(parkingCapacityTotal))+" Parkhausplätze Autos ins Herz der Stadt. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
+        messageBody = "#Karlsruhe lockt Autos ins Herz der Stadt: Um "+thisTime+ " Uhr sind Parkhäuser mit einer Kapazität von " + str(int(parkingCapacityTotal))+" Plätzen geöffnet. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
         statement = choice(['Prioritäten...',''])
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
     
