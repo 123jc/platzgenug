@@ -84,8 +84,9 @@ if (nansum(where(isnan(parkingFree),0,1))/float(len(parkingFree))) >= minParking
     option = -1  # choose message at random
 else:
     parkingFreeTotal = nan
-    option = 3  # print message 3
-
+    option = 5  # message to print
+    doTweet = False # stop tweeting
+    
 ## write to data file
 if False:
     df = pd.DataFrame({'Product Name':products,'Price':prices,'Rating':ratings}) 
@@ -136,16 +137,16 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
         
     # make messages (choose one)
     if option < 0:
-        option = choice([1,2,3])
+        option = choice([1,2,3,4,5])
     
     ## fraction, comparison to popular space
-    if option == 1:
+    if option <= 2:
         messageBody = "Im Zentrum von #Karlsruhe sind jetzt "+str(int(parkingFreeTotal))+" von " + str(int(parkingCapacityTotal))+" Auto-Parkhausplätzen ungenutzt ("+str(int(parkingFreeFraction*100))+"%). Für weitere Autos freigehalten: " + str(int(parkingFreeTotal*parkplatzFlaeche)) + "m2 = "+str(round(parkingFractionComp,1)).replace('.',',')+" mal "+vergleichsName+"."
         statement = choice(statements)
         hashtag = choice(hashtags)
 
     ## free area, comparison to alternative use
-    elif option == 2:
+    elif option <= 4:
         alternativeUseString = ''
         eachUseArea = parkingFreeArea / len(alternativeUseAreas)
         i = 0
@@ -170,7 +171,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
 
     
     ## total area, comparison to appartments
-    elif option == 3:
+    elif option == 5:
         messageBody = "#Karlsruhe lockt Autos ins Herz der Stadt: Um "+thisTime+ " Uhr sind Parkhäuser mit einer Kapazität von " + str(int(parkingCapacityTotal))+" Plätzen geöffnet. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
         statement = choice(['Prioritäten...',''])
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
