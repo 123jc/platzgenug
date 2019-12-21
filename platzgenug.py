@@ -50,9 +50,11 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     import pandas as pd
     import matplotlib.pyplot as plt
     from matplotlib.dates import DateFormatter,HourLocator,DayLocator
+    from matplotlib import use
     from numpy import nanmax,nanmin,nanargmin
     from datetime import timedelta
     import seaborn as sns
+    use('Agg') # no X
     # read data from file
     df = pd.read_csv(dataFile, parse_dates=[0],names=['datetime','free','capacity'],header=None)
     # select last 24h
@@ -70,7 +72,7 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     # set labels
     figTitle = 'Karlsruhe wünscht sich noch mehr Autos im Zentrum'
     labelFree = 'Gemeldete$^{*}$ Vakanz (min:' + str(int(freeMin)) + ", max: " + str(int(freeMax)) + ")"
-    labelCapacity = 'Gemeldete$^{*}$ Kapazität (min:' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
+    labelCapacity = 'Gemeldete$^{*}$ Kapazit\"at (min:' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
     labelUsed = "Belegung (rechnerisch)"
     # produce plot
     sns.set()
