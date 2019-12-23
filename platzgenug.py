@@ -305,7 +305,7 @@ if thisHour == dailyFigHour:
             )
             photo = open(dailyPlotFile, 'rb')
             response = twitter.upload_media(media=photo)
-            twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
+            twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) + " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
 
 
 exit()
