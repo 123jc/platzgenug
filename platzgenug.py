@@ -4,8 +4,9 @@ doSaveData = True
 doTweet = True
 postHourMin = 9 # no posting if hour smaller
 postHourMax = 21  # no more posting if hour greater
-dailyFigHour = 23  # produce and post daily figure at this time
+dailyFigHour = 8  # produce and post daily figure at this time
 dailyFigMinFreeLimit = 800 # only post if at least this many spots were free
+figMidnight = True  # produce the figure from midnight to midnight
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
 minParkingReportFractionForValid = 0.5  # minimum fraction of parking garages with valid reports needed
@@ -47,20 +48,22 @@ dailyPlotFile = dataDir + '/' + dailyPlotFileBase
 def plot_daily(dataFile,dailyPlotFile,endTime=''):
     """Produce a plot of the last 24h"""
     # imports
+    from matplotlib import use
+    use('Agg') # no X
     import pandas as pd
     import matplotlib.pyplot as plt
     from matplotlib.dates import DateFormatter,HourLocator,DayLocator
-    from matplotlib import use
     from numpy import nanmax,nanmin,nanargmin
     from datetime import timedelta
     import seaborn as sns
-    use('Agg') # no X
     # read data from file
     df = pd.read_csv(dataFile, parse_dates=[0],names=['datetime','free','capacity'],header=None)
     # select last 24h
     if endTime == '':  # default, nothing specified
         endTime = df['datetime'].iloc[-1]
     startTime = endTime - timedelta(hours=24,minutes=20)
+    centralTime = endTime - timedelta(hours=12)
+    centralDayStr = centralTime.strftime("%Y-%m-%d")
     mask = (df['datetime'] > startTime) & (df['datetime'] <= endTime)
     dfplot = df.loc[mask]
     # extract some numbers
@@ -71,8 +74,9 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     freeMinLoc = nanargmin(dfplot['free'])
     # set labels
     figTitle = 'Karlsruhe wünscht sich noch mehr Autos im Zentrum'
-    labelFree = 'Gemeldete$^{*}$ Vakanz (min:' + str(int(freeMin)) + ", max: " + str(int(freeMax)) + ")"
-    labelCapacity = 'Gemeldete$^{*}$ Kapazitaet (min:' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
+    figTitle = "Parkhausplätze Karlsruhe Zentrum, " + centralDayStr
+    labelFree = 'Gemeldete$^{*}$ Vakanz (min: ' + str(int(freeMin)) + ", max: " + str(int(freeMax)) + ")"
+    labelCapacity = 'Gemeldete$^{*}$ Kapazität (min: ' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
     labelUsed = "Belegung (rechnerisch)"
     # produce plot
     sns.set()
@@ -84,7 +88,7 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     itemFreeFill = ax.fill_between(x_dates,0,dfplot['free'])
     itemUsedFill = ax.fill_between(x_dates,dfplot['free'],dfplot['capacity'],label=labelUsed)
     ax.set_title(figTitle)
-    ax.set_ylabel("Parkhausplätze im Zentrum")
+    ax.set_ylabel("Parkhausplätze")
     ax.set_xlabel("Zeit")
 #    ax.legend([itemCapacity,itemFree],[labelCapacity,labelFree])
     # set text elements
@@ -92,20 +96,26 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     #, xytext=(3, 4),
     #        arrowprops=dict(facecolor='black', shrink=0.05))
     ax.legend(loc=2,prop={'size': 10})
-    plt.figtext(0.92, 0.5, 'https://twitter.com/autokorrekturKA', fontsize=8,rotation=270)
+    plt.figtext(0.92, 0.85, 'https://twitter.com/autokorrekturKA', fontsize=7,rotation=270)
 #    plt.figtext(0.55, 0.02, '*: Mindestangaben: Nicht alle Parkhäuser\nmelden immer. V.a. Vakanzangaben fehlen häufig.', fontsize=8)
-    plt.figtext(0.02, 0.02, '* Nicht alle Parkhäuser melden immer, v.a. Vakanzangaben fehlen häufig. Tatsächliche Werte also meist höher.', fontsize=8)
+    plt.figtext(0.02, 0.02, '* Daten von karlsruhe.de. Je Mindestwerte: Für einige Parkhäuser fehlen mitunter Angaben, v.a. zu Vakanzen.', fontsize=7)
     # set axis ranges
     yMax = (int(capacityMax/1000)+2)*1000
     ax.set_ylim(0,yMax)
     ax.set_xlim(startTime,endTime)
+    ax.set_xlim(datetime(centralTime.year,centralTime.month,centralTime.day,0,0,0),datetime(centralTime.year,centralTime.month,centralTime.day+1,0,0,0))
     # x axis labels (time)
-    ax.xaxis.set_major_locator(DayLocator())
-    ax.xaxis.set_major_formatter(DateFormatter("%d.%m.%y"))
-    ax.xaxis.set_minor_locator(HourLocator(interval=3))
-    ax.xaxis.set_minor_formatter(DateFormatter("%H:00"))
-    ax.xaxis.grid(True, which='minor')
-#    x_dates_str = dfplot['datetime'].dt.strftime('%d.%m. %H:00')
+    if False:
+        ax.xaxis.set_major_locator(DayLocator())
+        ax.xaxis.set_major_formatter(DateFormatter("%d.%m.%y"))
+        ax.xaxis.set_minor_locator(HourLocator(interval=3))
+        ax.xaxis.set_minor_formatter(DateFormatter("%H:00"))
+        ax.xaxis.grid(True, which='minor')
+    else:
+        ax.xaxis.set_major_locator(HourLocator(interval=3))
+        ax.xaxis.set_major_formatter(DateFormatter("%H:00"))
+        ax.xaxis.grid(True, which='major')
+    #    x_dates_str = dfplot['datetime'].dt.strftime('%d.%m. %H:00')
 #    ax.set_xticklabels(labels=x_dates_str, rotation=45, ha='right')
 #    ax.xaxis.set_major_locator(WeekdayLocator(interval=1))
 #    ax.xaxis.set_major_formatter(DateFormatter("%d.%m"))
@@ -199,7 +209,8 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
 now = datetime.now()
 current_time = now.strftime("%Y-%m-%d %H:%M:%S")
 thisHour = int(now.strftime("%H"))
-todayMidnight = datetime(now.year,now.month,now.day,0,10,0)
+todayMidnight = datetime(now.year,now.month,now.day,0,3,0)
+yesterdayMidnight = datetime(now.year,now.month,now.day-1,0,3,0)
 
 
 ## get info from web page
@@ -268,6 +279,27 @@ if doSaveData:
     
 
 ## convert to message and post
+if thisHour == dailyFigHour:
+    if figMidnight:
+        minFree = plot_daily(dataFile,dailyPlotFile,yesterdayMidnight)
+    else:
+        minFree = plot_daily(dataFile,dailyPlotFile)
+    if minFree >= dailyFigMinFreeLimit:
+        if doTweet:
+            twitter = Twython(
+                consumer_key,
+                consumer_secret,
+                access_token,
+                access_token_secret
+            )
+            photo = open(dailyPlotFile, 'rb')
+            response = twitter.upload_media(media=photo)
+            if figMidnight:
+                twitter.update_status(status="Gestern waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) + " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
+            else:
+                twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) + " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
+
+
 if thisHour >= postHourMin:
     if thisHour <= postHourMax:
         theMessage = assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option)
@@ -292,20 +324,6 @@ if thisHour >= postHourMin:
             #print("Tweeted: %s" % theMessage)
         else:
             print(theMessage,len(theMessage))
-
-if thisHour == dailyFigHour:
-    minFree = plot_daily(dataFile,dailyPlotFile)
-    if minFree >= dailyFigMinFreeLimit:
-        if doTweet:
-            twitter = Twython(
-                consumer_key,
-                consumer_secret,
-                access_token,
-                access_token_secret
-            )
-            photo = open(dailyPlotFile, 'rb')
-            response = twitter.upload_media(media=photo)
-            twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) + " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
 
 
 exit()
