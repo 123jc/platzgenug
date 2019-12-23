@@ -72,7 +72,7 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     # set labels
     figTitle = 'Karlsruhe wünscht sich noch mehr Autos im Zentrum'
     labelFree = 'Gemeldete$^{*}$ Vakanz (min:' + str(int(freeMin)) + ", max: " + str(int(freeMax)) + ")"
-    labelCapacity = 'Gemeldete$^{*}$ Kapazit\"at (min:' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
+    labelCapacity = 'Gemeldete$^{*}$ Kapazitaet (min:' + str(int(capacityMin)) + ", max: " + str(int(capacityMax)) + ")"
     labelUsed = "Belegung (rechnerisch)"
     # produce plot
     sns.set()
@@ -305,7 +305,7 @@ if thisHour == dailyFigHour:
             )
             photo = open(dailyPlotFile, 'rb')
             response = twitter.upload_media(media=photo)
-            twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei - sprich: überflüssig. Wo sind die überdachten Fahrradbügel? #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
+            twitter.update_status(status="In den letzten 24 Stunden waren immer mindestens " + str(int(minFree)) + " Parkhausplätze im Zentrum von #Karlsruhe frei. " + str(int(minFree)) " Autos, die vom Straßenrand verschwinden könnten... #autostadt #Verkehrswende jetzt", media_ids=[response['media_id']])
 
 
 exit()
