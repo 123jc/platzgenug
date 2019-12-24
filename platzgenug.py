@@ -281,7 +281,7 @@ if doSaveData:
 ## convert to message and post
 if thisHour == dailyFigHour:
     if figMidnight:
-        minFree = plot_daily(dataFile,dailyPlotFile,yesterdayMidnight)
+        minFree = plot_daily(dataFile,dailyPlotFile,todayMidnight)
     else:
         minFree = plot_daily(dataFile,dailyPlotFile)
     if minFree >= dailyFigMinFreeLimit:
