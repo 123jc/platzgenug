@@ -133,7 +133,7 @@ def plot_daily(dataFile,dailyPlotFile,endTime=''):
     return freeMin
     
 
-def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option):
+def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkingCapacityAllTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option):
     # imports
     from random import choice
     from datetime import datetime
@@ -182,7 +182,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
                 alternativeUseString += ', '
             i +=1
         
-        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+ " von "+ str(int(parkingCapacityTotal)) +" Parkhausplätzen ungenutzt. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 frei, z.B. für " + alternativeUseString + "."
+        messageBody = "#Karlsruhe Zentrum: "+str(int(parkingFreeTotal))+ " freie Parkhausplätze gemeldet. Wenn entsprechend Autos von den Straßenrändern verschwänden, würden " + str(int(parkingFreeTotal*parkplatzFlaeche)) +"m2 frei, z.B. für " + alternativeUseString + "."
         statement = choice(['',''])
         hashtag = choice(['#StaedteFuerMenschen','#Verkehrswende','#Autostadt'])
 
@@ -195,7 +195,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,verg
     
     ## total area, comparison to appartments
     elif option == 5:
-        messageBody = "#Karlsruhe lockt Autos ins Herz der Stadt: Um "+thisTime+ " Uhr sind Parkhäuser mit einer Kapazität von " + str(int(parkingCapacityTotal))+" Plätzen geöffnet. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
+        messageBody = "#Karlsruhe lockt Autos ins Herz der Stadt: Um "+thisTime+ " Uhr sind Parkhäuser mit einer Kapazität von " + str(int(parkingCapacityAllTotal))+" Plätzen geöffnet. Auf diesen etwa " + str(int(parkingCapacityTotal*parkplatzFlaeche))+"m2 könnte man " + str(int(parkingCapacityTotal*parkplatzFlaeche/familyAppArea)) + " Familienwohnungen mit je "+str(familyAppArea)+"m2 unterbringen."
         statement = choice(['Prioritäten...',''])
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
     
@@ -307,7 +307,7 @@ if thisHour == dailyFigHour:
 
 if thisHour >= postHourMin:
     if thisHour <= postHourMax:
-        theMessage = assemble_message(parkingFreeTotal,parkingCapacityTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option)
+        theMessage = assemble_message(parkingFreeTotal,parkingCapacityTotal,parkingCapacityAllTotal,parkplatzFlaeche,vergleichsFlaechen,familyAppArea,alternativeUseAreas,statements,hashtags,option)
         
 #        import code;code.interact(local=locals())
 
