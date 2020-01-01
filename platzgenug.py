@@ -4,12 +4,12 @@ doSaveData = True
 doTweet = True
 postHourMin = 9 # no posting if hour smaller
 postHourMax = 21  # no more posting if hour greater
-dailyFigHour = 8  # produce and post daily figure at this time
+dailyFigHour = 28  # produce and post daily figure at this time
 dailyFigMinFreeLimit = 800 # only post if at least this many spots were free
 figMidnight = True  # produce the figure from midnight to midnight
 parkingURL="https://web1.karlsruhe.de/service/Parken/"
 parkplatzFlaeche = 12.5 # m2 (analog @verkehrswatchms)
-minParkingReportFractionForValid = 0.5  # minimum fraction of parking garages with valid reports needed
+minParkingReportFractionForValid = 0.1  # minimum fraction of parking garages with valid reports needed
 familyAppArea = 110 # m2
 dataFileBase = 'data.csv'
 dailyPlotFileBase = 'daily.png'
@@ -38,6 +38,7 @@ from os import getcwd
 theTime = []
 parkingName = []
 parkingCapacity = []
+parkingCapacityAll = []   # include lots that appear to be open but do not report a number of free spaces
 parkingOpen = []
 parkingFree = []
 dataDir = getcwd()
@@ -210,7 +211,6 @@ now = datetime.now()
 current_time = now.strftime("%Y-%m-%d %H:%M:%S")
 thisHour = int(now.strftime("%H"))
 todayMidnight = datetime(now.year,now.month,now.day,0,3,0)
-yesterdayMidnight = datetime(now.year,now.month,now.day-1,0,3,0)
 
 
 ## get info from web page
@@ -240,13 +240,18 @@ for i in list(range(len(parking_containers))):
     #print(thisParkingName,thisParkingOpen,thisParkingFree,thisParkingCapacity)
     # append to lists
     parkingName.append(thisParkingName)
-    parkingCapacity.append(thisParkingCapacity)
+    parkingCapacityAll.append(thisParkingCapacity)
+    if isnan(thisParkingFree):
+        parkingCapacity.append(nan)
+    else:
+        parkingCapacity.append(thisParkingCapacity)
     parkingOpen.append(thisParkingOpen)
     parkingFree.append(thisParkingFree)
     
 
 # compute total sums and fraction
 parkingCapacityTotal = nansum(parkingCapacity)
+parkingCapacityAllTotal = nansum(parkingCapacityAll)
 if (nansum(where(isnan(parkingFree),0,1))/float(len(parkingFree))) >= minParkingReportFractionForValid:
     parkingFreeTotal = nansum(parkingFree)
     option = -1  # choose message at random
@@ -272,7 +277,7 @@ if False:
     df.to_csv('my_csv.csv', mode='a', header=False)
 
 if doSaveData:
-    myCsvRow = current_time + "," + str(parkingFreeTotal) + "," + str(parkingCapacityTotal) + '\n'
+    myCsvRow = current_time + "," + str(parkingFreeTotal) + "," + str(parkingCapacityTotal) + "," + str(parkingCapacityAllTotal) + '\n'
     with open(dataFile,'a') as fd:
         fd.write(myCsvRow)
 
