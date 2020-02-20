@@ -17,7 +17,7 @@ vergleichsFlaechen = {'Marktplatz':6000,'Friedrichsplatz':12100,'Botanischer Gar
 alternativeUseAreas = {'Bäume': parkplatzFlaeche/1.1, 'Cafétische oder Ruhebänke':parkplatzFlaeche/1.5, 'Kinderwippen':parkplatzFlaeche/.9 ,'Fahrradbügelstellplätze':parkplatzFlaeche/9.}  # aus Parking Day-Fotos geschaetzt
 statements = ["Wo sind die überdachten Fahrradbügel?",
               "Karlsruhe: Roter Teppich für Autos.",
-              "Diskutiert die Fuß- und Radstrategie am 5.3., https://beteiligung.karlsruhe.de/content/bbv/details/97",
+              "Diskutiert die Fuß- und Radstrategie am 5.3., https://beteiligung.karlsruhe.de/content/bbv/details/97/",
               "Sind trotzdem noch Radwege zugeparkt?",
               "Sind dennoch weiter Autos im Halteverbot abgestellt?",
               "Fahren dennoch weiter Autos auf der Suche nach kostenlosen Parkplätzen durch die Stadt?"]
