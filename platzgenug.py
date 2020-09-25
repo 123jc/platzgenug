@@ -156,6 +156,13 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkingCapacityAllTot
 
     # compute fraction of area
     parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
+
+    # mention someone?
+    mentionText = ""
+    mention = choice(range(100))
+    #print(mention)
+    if mention == 7:  # 1 in 100 chance
+        mentionText = "@Karlsruher"
         
     # make messages (choose one)
     if option < 0:
@@ -199,7 +206,7 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkingCapacityAllTot
         hashtag = choice(['#StaedteFuerMenschen','#Wohnungsnot','#Autostadt'])
     
     # assemble
-    theMessage = messageBody + ' ' + statement + " " + hashtag
+    theMessage = messageBody + ' ' + statement + " " + mentionText + " " + hashtag
 
     # done
     return theMessage
