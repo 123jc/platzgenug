@@ -243,7 +243,7 @@ for i in list(range(len(parking_containers))):
         temp = parking_containers[i].text
         thisParkingCapacity = int(temp[temp.find('gesamt')+7:temp.find('Parkpl')-1])
 
-    if thisParkingFree = 9999:  # this is an error
+    if thisParkingFree == 9999:  # this is an error
         thisParkingFree = nan
         thisParkingCapacity = nan
         thisParkingOpen = False
