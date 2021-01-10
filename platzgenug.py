@@ -158,11 +158,11 @@ def assemble_message(parkingFreeTotal,parkingCapacityTotal,parkingCapacityAllTot
     parkingFractionComp = (parkingFreeTotal * parkplatzFlaeche) / vergleichsFlaeche
 
     # mention someone?
-    mentionText = " "
+    mentionText = ""
     mention = choice(range(1000))
     #print(mention)
-    if mention == 837:  # 1 in 1000 chance
-        mentionText = " @Karlsruher"
+#    if mention == 837:  # 1 in 1000 chance
+#        mentionText = " @Karlsruher"
         
     # make messages (choose one)
     if option < 0:
